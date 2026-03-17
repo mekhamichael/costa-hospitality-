@@ -2276,6 +2276,7 @@ flex-direction: column;
   .private-events__contact {
   margin-top: 102px;
   margin-bottom: 100px;
+  text-align: center;
 }
   .private-events__media img {
     min-height: 280px;
