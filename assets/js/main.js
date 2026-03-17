@@ -9,7 +9,8 @@
 (function() {
   "use strict";
 
-  /**
+  // ==================== Scroll Behavior ====================
+/**
    * Apply .scrolled class to the body as the page is scrolled down
    */
   function toggleScrolled() {
@@ -22,7 +23,8 @@
   document.addEventListener('scroll', toggleScrolled);
   window.addEventListener('load', toggleScrolled);
 
-  /**
+  // ==================== Mobile Navigation ====================
+/**
    * Mobile nav toggle
    */
   const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
@@ -34,7 +36,8 @@
   }
   mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
 
-  /**
+  // ==================== Mobile Navigation: Link Close ====================
+/**
    * Hide mobile nav on same-page/hash links
    */
   document.querySelectorAll('#navmenu a').forEach(navmenu => {
@@ -46,7 +49,8 @@
 
   });
 
-  /**
+  // ==================== Mobile Navigation: Dropdowns ====================
+/**
    * Toggle mobile nav dropdowns
    */
   document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
@@ -57,6 +61,7 @@
       e.stopImmediatePropagation();
     });
   });
+// ==================== Scroll Top ====================
 /**
    * Scroll top button
    */
@@ -78,9 +83,25 @@
   window.addEventListener('load', toggleScrollTop);
   document.addEventListener('scroll', toggleScrollTop);
 
-  /**
+  // ==================== AOS Animation ====================
+/**
    * Animation on scroll function and init
    */
+  function applyAosAttributes() {
+    document.querySelectorAll('section').forEach((section, index) => {
+      if (!section.getAttribute('data-aos')) {
+        section.setAttribute('data-aos', 'fade-down');
+      }
+      section.setAttribute('data-aos-delay', `${Math.min(index * 80, 400)}`);
+    });
+
+    const footer = document.querySelector('footer');
+    if (footer) {
+      footer.setAttribute('data-aos', 'fade-up');
+      footer.setAttribute('data-aos-delay', '0');
+    }
+  }
+
   function aosInit() {
     AOS.init({
       duration: 600,
@@ -89,9 +110,14 @@
       mirror: false
     });
   }
-  window.addEventListener('load', aosInit);
 
-  /**
+  window.addEventListener('load', () => {
+    applyAosAttributes();
+    aosInit();
+  });
+
+  // ==================== Carousel Indicators ====================
+/**
    * Auto generate the carousel indicators
    */
   document.querySelectorAll('.carousel-indicators').forEach((carouselIndicator) => {
@@ -104,14 +130,16 @@
     });
   });
 
-  /**
+  // ==================== Glightbox ====================
+/**
    * Initiate glightbox
    */
   const glightbox = GLightbox({
     selector: '.glightbox'
   });
 
-    /**
+    // ==================== Swiper Sliders ====================
+/**
    * Init swiper sliders
    */
   function initSwiper() {
@@ -130,7 +158,8 @@
 
   window.addEventListener("load", initSwiper);
 
-  /**
+  // ==================== Hash Scroll Fix ====================
+/**
    * Correct scrolling position upon page load for URLs containing hash links.
    */
   window.addEventListener('load', function(e) {
@@ -148,7 +177,8 @@
     }
   });
 
-  /**
+  // ==================== Navmenu Scrollspy ====================
+/**
    * Navmenu Scrollspy
    */
   let navmenulinks = document.querySelectorAll('.navmenu a');
@@ -168,7 +198,8 @@
     })
   }
 
-      /**
+      // ==================== Timeline Controls ====================
+/**
    * Timeline controls + auto scroll every 5 seconds
    */
   function initTimelineControls() {
@@ -237,6 +268,7 @@
   document.addEventListener('scroll', navmenuScrollspy);
 
 })();
+
 
 
 
