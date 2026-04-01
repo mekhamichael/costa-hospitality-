@@ -87,33 +87,143 @@
 /**
    * Animation on scroll function and init
    */
-  function applyAosAttributes() {
-    document.querySelectorAll('section').forEach((section, index) => {
-      if (!section.getAttribute('data-aos')) {
-        section.setAttribute('data-aos', 'fade-down');
-      }
-      section.setAttribute('data-aos-delay', `${Math.min(index * 80, 400)}`);
+  function clearAosAttributes() {
+    document.querySelectorAll('[data-aos]').forEach((el) => {
+      el.removeAttribute('data-aos');
+      el.removeAttribute('data-aos-delay');
+      el.removeAttribute('data-aos-duration');
+      el.removeAttribute('data-aos-easing');
+      el.removeAttribute('data-aos-offset');
+      el.removeAttribute('data-aos-anchor-placement');
+      el.removeAttribute('data-aos-once');
+      el.removeAttribute('data-aos-mirror');
     });
+  }
 
-    const footer = document.querySelector('footer');
-    if (footer) {
-      footer.setAttribute('data-aos', 'fade-up');
-      footer.setAttribute('data-aos-delay', '0');
+  function setAos(el, animation, delay = 0, duration = 700, easing = 'ease-out-cubic') {
+    if (!el) {
+      return;
+    }
+
+    el.setAttribute('data-aos', animation);
+    el.setAttribute('data-aos-duration', `${duration}`);
+    el.setAttribute('data-aos-easing', easing);
+
+    if (delay) {
+      el.setAttribute('data-aos-delay', `${delay}`);
+    } else {
+      el.removeAttribute('data-aos-delay');
     }
   }
 
-  function aosInit() {
-    AOS.init({
-      duration: 600,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
+  function applyStagger(selector, animation, options = {}) {
+    const baseDelay = options.baseDelay ?? 0;
+    const step = options.step ?? 80;
+    const maxDelay = options.maxDelay ?? 240;
+    const duration = options.duration ?? 700;
+    const easing = options.easing ?? 'ease-out-cubic';
+
+    document.querySelectorAll(selector).forEach((el, index) => {
+      const delay = Math.min(baseDelay + index * step, maxDelay);
+      setAos(el, animation, delay, duration, easing);
     });
   }
 
-  window.addEventListener('load', () => {
+  function applyRestaurantItems(selector) {
+    document.querySelectorAll(selector).forEach((item, index) => {
+      const isReverse = item.classList.contains('is-reverse');
+      const text = item.querySelector('.restaurant-text');
+      const media = item.querySelector('.restaurant-media');
+      const delay = Math.min(index * 120, 240);
+
+      setAos(text, isReverse ? 'fade-left' : 'fade-right', delay);
+      setAos(media, isReverse ? 'fade-right' : 'fade-left', delay);
+    });
+  }
+
+  function applyAosAttributes() {
+    clearAosAttributes();
+
+    document.querySelectorAll('section').forEach((section) => {
+      if (section.id === 'hero' || section.classList.contains('hero') || section.classList.contains('restaurants-hero')) {
+        return;
+      }
+      setAos(section, 'fade', 0, 600);
+    });
+
+    applyStagger('.section-title', 'fade-up', { step: 60, maxDelay: 180 });
+
+    setAos(document.querySelector('#the_heart .the-heart'), 'fade-up', 0, 800);
+    setAos(document.querySelector('#the_heart .pra-sec1'), 'fade-up', 120, 800);
+
+    setAos(document.querySelector('#our_story .card-item'), 'fade-up', 0, 750);
+    applyStagger('#our_TIMELINE .timeline-col', 'fade-up', { step: 120, maxDelay: 360 });
+    applyStagger('#stats-counter .stats-item', 'fade-up', { step: 120, maxDelay: 240 });
+
+    setAos(document.querySelector('.founder-section img'), 'fade-right', 0, 800);
+    setAos(document.querySelector('.founder-section .founder-text'), 'fade-left', 80, 800);
+
+    setAos(document.querySelector('#ACCOLADES h3'), 'fade-up', 0, 700);
+    setAos(document.querySelector('#ACCOLADES p'), 'fade-up', 120, 700);
+    setAos(document.querySelector('#ACCOLADES .logos-container'), 'fade-up', 220, 700);
+
+    setAos(document.querySelector('#future .future-header'), 'fade-up', 0, 750);
+    applyStagger('#future .future-card', 'fade-up', { step: 140, maxDelay: 280 });
+
+    setAos(document.querySelector('.gift-content'), 'fade-up', 0, 800);
+    const giftStripInner = document.querySelector('.gift-strip-inner');
+    setAos(giftStripInner, 'fade-up', 120, 700);
+    if (giftStripInner) {
+      giftStripInner.setAttribute('data-aos-offset', '0');
+      giftStripInner.setAttribute('data-aos-anchor-placement', 'bottom-bottom');
+    }
+
+    setAos(document.querySelector('#restaurants-hero .restaurants-hero__inner'), 'fade-up', 0, 800);
+    setAos(document.querySelector('#getintouch-hero .restaurants-hero__inner'), 'fade-up', 0, 800);
+
+    setAos(document.querySelector('#our-concepts .concepts-heading'), 'fade-up', 0, 800);
+    setAos(document.querySelector('#our-concepts .concepts-logos'), 'fade-up', 120, 800);
+
+    applyStagger('.restaurants-showcase .showcase-header', 'fade-up', { step: 0, maxDelay: 0, duration: 800 });
+    applyRestaurantItems('#restaurants-showcase .restaurant-item');
+    applyRestaurantItems('#bar-showcase .restaurant-item');
+    applyRestaurantItems('#BEACHES-showcase .restaurant-item');
+
+    setAos(document.querySelector('#team-contact .team-contact__content'), 'fade-right', 0, 800);
+    setAos(document.querySelector('#team-contact .team-contact__collage'), 'fade-left', 120, 800);
+    setAos(document.querySelector('#private-events .private-events__media'), 'fade-right', 0, 800);
+    setAos(document.querySelector('#private-events .private-events__content'), 'fade-left', 120, 800);
+    setAos(document.querySelector('#newsletter .newsletter__title'), 'fade-up', 0, 700);
+    setAos(document.querySelector('#newsletter .newsletter__form'), 'fade-up', 120, 700);
+
+    // Footer content is handled via gift content / strip animations.
+  }
+
+  function aosInit() {
+    if (typeof AOS === 'undefined') {
+      return;
+    }
+
+    AOS.init({
+      duration: 700,
+      easing: 'ease-out-cubic',
+      once: true,
+      mirror: false,
+      offset: 120,
+      anchorPlacement: 'top-bottom'
+    });
+  }
+
+  function initAos() {
     applyAosAttributes();
     aosInit();
+  }
+
+  document.addEventListener('DOMContentLoaded', initAos);
+  window.addEventListener('load', () => {
+    if (typeof AOS !== 'undefined') {
+      AOS.refresh();
+    }
   });
 
   // ==================== Carousel Indicators ====================

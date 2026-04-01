@@ -221,7 +221,7 @@
         <!-- Part: Newsletter Heading -->
         <h2 class="newsletter__title">Subscribe to our newsletter - Don&apos;t miss out!</h2>
         <!-- Part: Newsletter Form -->
-        <form class="newsletter__form" action="#">
+        <form class="newsletter__form php-email-form" action="forms/newsletter.php" method="post">
           <label class="newsletter__label" for="newsletter-email">Email *</label>
           <div class="newsletter__fields">
             <input id="newsletter-email" class="newsletter__input" type="email" name="email" placeholder="e.g., email@example.com" required>
@@ -231,6 +231,9 @@
             <input type="checkbox" name="subscribe">
             <span>I want to subscribe to your mailing list.</span>
           </label>
+          <div class="loading">Loading</div>
+          <div class="error-message"></div>
+          <div class="sent-message">Your subscription request has been sent. Thank you!</div>
         </form>
       </div>
     </section>

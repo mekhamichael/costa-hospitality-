@@ -2362,6 +2362,22 @@ flex-direction: column;
   display: inline-block;
 }
 
+.php-email-form .loading,
+.php-email-form .error-message,
+.php-email-form .sent-message {
+  display: none;
+}
+
+.php-email-form .error-message {
+  color: #ffb3b3;
+  font-size: 12px;
+}
+
+.php-email-form .sent-message {
+  color: #c9f0c9;
+  font-size: 12px;
+}
+
 @media (max-width: 767px) {
   .newsletter {
     padding: 44px 0 56px;
